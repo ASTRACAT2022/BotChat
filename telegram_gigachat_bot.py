@@ -32,7 +32,7 @@ app = Flask(__name__)
 app.secret_key = 'super_secret_key'  # Для сессий Flask
 
 # Telegram токен
-TELEGRAM_TOKEN = 'YOUR_TELEGRAM_BOT_TOKEN'  # Замените на ваш токен
+TELEGRAM_TOKEN = '7705234760:AAFjd85N-4egdP3e7YWd90RXvpbn-FXJDag'
 
 # Инициализация базы данных SQLite
 def init_db():
@@ -220,13 +220,13 @@ def users():
 
 @app.route('/block_user/<int:telegram_id>')
 def block_user(telegram_id):
-    if '当天
     if 'username' not in session:
         return redirect(url_for('login'))
     with sqlite3.connect('database.db') as conn:
         c = conn.cursor()
         c.execute('UPDATE users SET is_blocked = 1 WHERE telegram_id = ?', (telegram_id,))
         conn.commit()
+    flash(f'Пользователь {telegram_id} заблокирован')
     return redirect(url_for('users'))
 
 @app.route('/unblock_user/<int:telegram_id>')
@@ -237,6 +237,7 @@ def unblock_user(telegram_id):
         c = conn.cursor()
         c.execute('UPDATE users SET is_blocked = 0 WHERE telegram_id = ?', (telegram_id,))
         conn.commit()
+    flash(f'Пользователь {telegram_id} разблокирован')
     return redirect(url_for('users'))
 
 @app.route('/requests')
@@ -260,7 +261,10 @@ def broadcast():
             c.execute('SELECT telegram_id FROM users WHERE is_blocked = 0')
             users = c.fetchall()
         for user in users:
-            context.bot.send_message(chat_id=user[0], text=message)
+            try:
+                app.bot.send_message(chat_id=user[0], text=message)
+            except Exception as e:
+                logger.error(f"Ошибка отправки сообщения пользователю {user[0]}: {e}")
         flash('Сообщение отправлено всем активным пользователям')
         return redirect(url_for('broadcast'))
     return render_template('broadcast.html')
@@ -309,6 +313,9 @@ def main():
     application.add_handler(CommandHandler("start", start))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     application.add_error_handler(error_handler)
+    
+    # Сохраняем bot в app для рассылки
+    app.bot = application.bot
     
     logger.info("Бот и веб-панель запущены")
     
