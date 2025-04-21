@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Запросы</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-blue-500 p-4">
+        <div class="container mx-auto flex justify-between">
+            <a href="{{ url_for('dashboard') }}" class="text-white text-lg font-bold">Панель управления</a>
+            <div>
+                <a href="{{ url_for('users') }}" class="text-white mr-4">Пользователи</a>
+                <a href="{{ url_for('requests') }}" class="text-white mr-4">Запросы</a>
+                <a href="{{ url_for('broadcast') }}" class="text-white mr-4">Рассылка</a>
+                <a href="{{ url_for('logout') }}" class="text-white">Выход</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container mx-auto p-6">
+        <h1 class="text-3xl font-bold mb-6">Запросы</h1>
+        <table class="w-full bg-white rounded-lg shadow-lg">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="p-3 text-left">ID</th>
+                    <th class="p-3 text-left">Telegram ID</th>
+                    <th class="p-3 text-left">Имя пользователя</th>
+                    <th class="p-3 text-left">Сообщение</th>
+                    <th class="p-3 text-left">Ответ</th>
+                    <th class="p-3 text-left">Дата</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for req in requests %}
+                <tr>
+                    <td class="p-3">{{ req[0] }}</td>
+                    <td class="p-3">{{ req[1] }}</td>
+                    <td class="p-3">{{ req[2] or '' }}</td>
+                    <td class="p-3">{{ req[3] }}</td>
+                    <td class="p-3">{{ req[4] }}</td>
+                    <td class="p-3">{{ req[5] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
