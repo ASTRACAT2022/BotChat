@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Панель управления</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-blue-500 p-4">
+        <div class="container mx-auto flex justify-between">
+            <a href="{{ url_for('dashboard') }}" class="text-white text-lg font-bold">Панель управления</a>
+            <div>
+                <a href="{{ url_for('users') }}" class="text-white mr-4">Пользователи</a>
+                <a href="{{ url_for('requests') }}" class="text-white mr-4">Запросы</a>
+                <a href="{{ url_for('broadcast') }}" class="text-white mr-4">Рассылка</a>
+                <a href="{{ url_for('logout') }}" class="text-white">Выход</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container mx-auto p-6">
+        <h1 class="text-3xl font-bold mb-6">Статистика</h1>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h2 class="text-xl font-semibold">Всего пользователей</h2>
+                <p class="text-2xl">{{ total_users }}</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h2 class="text-xl font-semibold">Заблокированные</h2>
+                <p class="text-2xl">{{ blocked_users }}</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h2 class="text-xl font-semibold">Всего запросов</h2>
+                <p class="text-2xl">{{ total_requests }}</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h2 class="text-xl font-semibold">Активные пользователи</h2>
+                <p class="text-2xl">{{ active_users }}</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
